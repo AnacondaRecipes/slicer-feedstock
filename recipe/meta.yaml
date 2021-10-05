@@ -18,6 +18,8 @@ build:
 requirements:
   host:
     - pip
+    - setuptools
+    - wheel
     - python >=3.6
   run:
     - python >=3.6
