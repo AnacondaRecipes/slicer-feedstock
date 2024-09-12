@@ -1,6 +1,5 @@
 {% set name = "slicer" %}
-{% set version = "0.0.7" %}
-
+{% set version = "0.0.8" %}
 
 package:
   name: {{ name|lower }}
@@ -8,35 +7,58 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/slicer-{{ version }}.tar.gz
-  sha256: f5d5f7b45f98d155b9c0ba6554fa9770c6b26d5793a3e77a1030fb56910ebeec
+  sha256: 2e7553af73f0c0c2d355f4afcc3ecf97c6f2156fcf4593955c3f56cf6c4d6eb7
+  patches:
+    - patches/0001-fix-tests-relative-imports.patch
 
 build:
   number: 0
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [py<37]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
+  build:
+    - patch     # [not win]
+    - m2-patch  # [win]
   host:
+    - python
     - pip
     - setuptools
     - wheel
-    - python >=3.6
   run:
-    - python >=3.6
+    - python
 
 test:
   imports:
     - slicer
-  commands:
-    - pip check
   requires:
     - pip
+    - pytest
+    # test requirements, see
+    #   https://github.com/interpretml/slicer/blob/v0.0.8/slicer/test_slicer.py#L13-L19
+    # and
+    #   https://github.com/interpretml/slicer/blob/v0.0.8/.github/workflows/run_tests.yml#L27C23-L27C54
+    - pandas
+    - scipy
+    - numpy
+    - pytorch
+  source_files:
+    - slicer/test_slicer.py
+  commands:
+    - pip check
+    - pytest -vv slicer/test_slicer.py
 
 about:
   home: https://github.com/interpretml/slicer
-  summary: A small package for big slicing.
   license: MIT
   license_file: LICENSE
+  license_family: MIT
+  summary: Unified slicing for all Python data structures.
+  description: |
+    slicer wraps tensor-like objects and provides
+    a uniform slicing interface via __getitem__.
+  doc_url: https://github.com/interpretml/slicer/blob/master/README.md
+  dev_url: https://github.com/interpretml/slicer
 
 extra:
   recipe-maintainers:

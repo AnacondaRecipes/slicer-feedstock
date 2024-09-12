@@ -1,0 +1,50 @@
+From 2516b0de8997849baa134ebd7c21b46e0cb4c9db Mon Sep 17 00:00:00 2001
+From: Lorenzo Pirritano <lpirritano@anaconda.com>
+Date: Wed, 11 Sep 2024 16:57:46 +0200
+Subject: [PATCH] fix tests relative imports
+
+---
+ slicer/test_slicer.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/slicer/test_slicer.py b/slicer/test_slicer.py
+index 6f3503d..6431fdd 100644
+--- a/slicer/test_slicer.py
++++ b/slicer/test_slicer.py
+@@ -4,11 +4,11 @@ An unholy balance of use cases and test coverage.
+ 
+ import pytest
+ 
+-from .slicer import AtomicSlicer
++from slicer.slicer import AtomicSlicer
+ 
+-from . import Slicer as S
+-from . import Alias as A
+-from . import Obj as O
++from slicer import Slicer as S
++from slicer import Alias as A
++from slicer import Obj as O
+ 
+ import pandas as pd
+ import numpy as np
+@@ -19,7 +19,7 @@ from scipy.sparse import dok_matrix
+ from scipy.sparse import lil_matrix
+ 
+ 
+-from .utils_testing import ctr_eq
++from slicer.utils_testing import ctr_eq
+ 
+ 
+ def test_slicer_ragged_numpy():
+@@ -304,7 +304,7 @@ def test_slicer_pandas():
+ 
+ 
+ def test_handle_newaxis_ellipses():
+-    from .slicer_internal import _handle_newaxis_ellipses
++    from slicer.slicer_internal import _handle_newaxis_ellipses
+ 
+     index_tup = (1,)
+     max_dim = 3
+-- 
+2.39.1
+
