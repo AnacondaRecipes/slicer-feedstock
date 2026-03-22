@@ -35,7 +35,7 @@ test:
     #   https://github.com/interpretml/slicer/blob/v0.0.8/slicer/test_slicer.py#L13-L19
     # and
     #   https://github.com/interpretml/slicer/blob/v0.0.8/.github/workflows/run_tests.yml#L27C23-L27C54
-    - pandas
+    - pandas <3
     - scipy
     - numpy
     # pytorch is not available for PY3.14
