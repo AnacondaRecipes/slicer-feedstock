@@ -12,14 +12,11 @@ source:
     - patches/0001-fix-tests-relative-imports.patch
 
 build:
-  number: 1
+  number: 2
   skip: true  # [py<36]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
-  build:
-    - patch     # [not win]
-    - m2-patch  # [win]
   host:
     - python
     - pip
@@ -38,15 +35,17 @@ test:
     #   https://github.com/interpretml/slicer/blob/v0.0.8/slicer/test_slicer.py#L13-L19
     # and
     #   https://github.com/interpretml/slicer/blob/v0.0.8/.github/workflows/run_tests.yml#L27C23-L27C54
-    - pandas
+    - pandas <3
     - scipy
     - numpy
-    - pytorch
+    # pytorch is not available for PY3.14
+    - pytorch  # [py<314]
   source_files:
     - slicer/test_slicer.py
   commands:
     - pip check
-    - pytest -vv slicer/test_slicer.py
+    # Skip 3.14 -> E ModuleNotFoundError: No module named 'torch'
+    - pytest -vv slicer/test_slicer.py  # [py<314]
 
 about:
   home: https://github.com/interpretml/slicer
